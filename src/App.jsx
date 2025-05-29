@@ -5,8 +5,8 @@ import {
 } from "@/components/ui/sidebar";
 import { AppSidebar } from "./components/app-sidebar";
 import { Route, Routes } from "react-router";
-import Dashboard from "./app-components/Dashboard";
-import Products from "./app-components/products/Products";
+import Dashboard from "./pages/Dashboard";
+import Products from "./pages/Products";
 import Navbar from "./app-components/Navbar";
 
 function App() {

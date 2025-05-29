@@ -17,7 +17,7 @@ import { Link } from "react-router";
 
 function Navbar() {
   return (
-    <div className="flex fixed w-full top-0 left-0  p-4 items-center bg-red-700 justify-between">
+    <div className="flex p-4 items-center justify-between sticky top-0 bg-background z-1">
       <SidebarTrigger />
       <div>
         {/* <Link href="/">Dashboard</Link> */}
