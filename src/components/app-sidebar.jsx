@@ -24,6 +24,7 @@ import {
   LogOut,
   User,
   Settings2,
+  BriefcaseMedicalIcon,
 } from "lucide-react";
 import {
   DropdownMenu,
@@ -49,9 +50,9 @@ export function AppSidebar() {
       icon: Inbox,
     },
     {
-      title: "Calendar",
-      url: "#",
-      icon: Calendar,
+      title: "Brand",
+      url: "/brand",
+      icon: BriefcaseMedicalIcon,
     },
     {
       title: "Search",

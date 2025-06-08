@@ -8,6 +8,9 @@ import { Route, Routes } from "react-router";
 import Dashboard from "./pages/Dashboard";
 import Products from "./pages/Products";
 import Navbar from "./app-components/Navbar";
+import AddProducts from "./app-components/products/AddProducts";
+import Brand from "./pages/Brand";
+import AddBrand from "./app-components/brand/AddBrand";
 
 function App() {
   return (
@@ -21,6 +24,9 @@ function App() {
             <Routes>
               <Route path="/" element={<Dashboard />} />
               <Route path="/products" element={<Products />} />
+              <Route path="/products/add-products" element={<AddProducts />} />
+              <Route path="/brand" element={<Brand />} />
+              <Route path="/brand/add-brand" element={<AddBrand />} />
             </Routes>
           </div>
         </main>

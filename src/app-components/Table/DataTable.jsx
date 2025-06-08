@@ -23,7 +23,7 @@ export function DataTable({ columns, data }) {
     })
 
     return (
-        <div className="rounded-md border">
+        <div className="rounded-md mt-5 border">
             <Table>
                 <TableHeader>
                     {table.getHeaderGroups().map((headerGroup) => (
