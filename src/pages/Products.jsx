@@ -4,9 +4,11 @@ import { DataTable } from "../app-components/Table/DataTable";
 import { columns } from "../app-components/products/columns.jsx";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { useNavigate } from "react-router";
 
 const Products = () => {
     const [products, setProducts] = useState(null);
+    const navigate = useNavigate()
 
     const fetchAllProducts = async () => {
         try {
@@ -24,11 +26,11 @@ const Products = () => {
 
     const data = products
         ? products.map((product) => ({
-              name: product.name,
-              price: product.price,
-              quantity: product.quantity,
-              stock: product.lowStockAlert,
-          }))
+            name: product.name,
+            price: product.price,
+            quantity: product.quantity,
+            stock: product.lowStockAlert,
+        }))
         : [];
 
     return (
@@ -42,7 +44,11 @@ const Products = () => {
                     placeholder="Search"
                     className="md:w-[50%]"
                 />
-                <Button className="cursor-pointer">Add</Button>
+                <Button className="cursor-pointer"
+                    onClick={() => navigate("/product/add-product")}
+                >
+                    Add
+                </Button>
             </div>
             <DataTable columns={columns} data={data} />
         </div>

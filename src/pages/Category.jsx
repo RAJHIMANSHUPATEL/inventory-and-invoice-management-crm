@@ -1,27 +1,30 @@
-import { getAllBrands } from "@/api/brands-api";
+import { getAllCategories } from "@/api/categories-api";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { useNavigate } from "react-router";
 
-function Brand() {
+const Category = () => {
+
     const navigate = useNavigate()
-    const fetchBrands = async () => {
+
+    const fetchCategories = async () => {
         try {
-            const response = await getAllBrands();
+            const response = await getAllCategories();
             console.log(response);
         } catch (error) {
             console.log(error.message);
         }
     };
     useEffect(() => {
-        fetchBrands();
+        fetchCategories();
     }, []);
+
 
     return (
         <div>
             <h1 className="bg-primary-foreground text-center text-lg p-2 mb-4 rounded-sm border border-gray-500">
-                Brands
+                Categories
             </h1>
             <div className="w-full flex justify-between">
                 <Input
@@ -31,7 +34,7 @@ function Brand() {
                 />
                 <Button
                     className="cursor-pointer"
-                    onClick={() => navigate("/brand/add-brand")}
+                    onClick={() => navigate("/category/add-category")}
                 >
                     Add
                 </Button>
@@ -41,4 +44,4 @@ function Brand() {
     );
 }
 
-export default Brand;
+export default Category

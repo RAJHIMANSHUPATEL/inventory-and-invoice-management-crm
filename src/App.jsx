@@ -11,6 +11,8 @@ import Navbar from "./app-components/Navbar";
 import AddProducts from "./app-components/products/AddProducts";
 import Brand from "./pages/Brand";
 import AddBrand from "./app-components/brand/AddBrand";
+import Category from "./pages/Category";
+import AddCategory from "./app-components/category/AddCategory";
 
 function App() {
   return (
@@ -23,10 +25,11 @@ function App() {
           <div className="p-4">
             <Routes>
               <Route path="/" element={<Dashboard />} />
-              <Route path="/products" element={<Products />} />
-              <Route path="/products/add-products" element={<AddProducts />} />
+              <Route path="/product" element={<Products />} />
+              <Route path="/product/add-product" element={<AddProducts />} />
               <Route path="/brand" element={<Brand />} />
               <Route path="/brand/add-brand" element={<AddBrand />} />
+              <Route path="/category/add-category" element={<AddCategory />} />
             </Routes>
           </div>
         </main>

@@ -14,7 +14,7 @@ export const getAllProducts = async()=> {
 
 export const addNewProduct = async (data) => {
     try {
-        const response = await axios.post(`${SITE_CONFIG.baseUrl}/api/product/add-product`, data)
+        const response = await axios.post(`${SITE_CONFIG.baseUrl}/api/product/add_product`, data);
         return response;
     } catch (error) {
         throw new Error(error.message)

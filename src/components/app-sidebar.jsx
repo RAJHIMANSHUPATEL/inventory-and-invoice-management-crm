@@ -14,10 +14,8 @@ import {
 import { Link } from "react-router";
 import {
   LayoutDashboard,
-  Home,
+  Tally4,
   Inbox,
-  Calendar,
-  Search,
   Settings,
   User2,
   ChevronUp,
@@ -55,9 +53,9 @@ export function AppSidebar() {
       icon: BriefcaseMedicalIcon,
     },
     {
-      title: "Search",
-      url: "#",
-      icon: Search,
+      title: "Categories",
+      url: "/category",
+      icon: Tally4,
     },
     {
       title: "Settings",
