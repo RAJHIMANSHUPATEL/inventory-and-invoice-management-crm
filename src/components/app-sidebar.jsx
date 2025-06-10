@@ -44,7 +44,7 @@ export function AppSidebar() {
     },
     {
       title: "Products",
-      url: "/products",
+      url: "/product",
       icon: Inbox,
     },
     {
