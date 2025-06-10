@@ -1,15 +1,19 @@
 import { getAllBrands } from "@/api/brands-api";
+import { columns } from "@/app-components/brand/BrandsColumns";
+import { DataTable } from "@/app-components/Table/DataTable";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 
 function Brand() {
+    const [data, setData] = useState([])
     const navigate = useNavigate()
     const fetchBrands = async () => {
         try {
             const response = await getAllBrands();
-            console.log(response);
+            setData(response.data);
+            console.log(response.data);
         } catch (error) {
             console.log(error.message);
         }
@@ -36,7 +40,7 @@ function Brand() {
                     Add
                 </Button>
             </div>
-            {/* <DataTable columns={columns} data={data} /> */}
+            <DataTable columns={columns} data={data} />
         </div>
     );
 }

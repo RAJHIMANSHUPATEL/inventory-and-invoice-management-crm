@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { getAllProducts } from "@/api/products-api";
 import { DataTable } from "../app-components/Table/DataTable";
-import { columns } from "../app-components/products/columns.jsx";
+import { columns } from "../app-components/products/ProductColumns.jsx";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router";
