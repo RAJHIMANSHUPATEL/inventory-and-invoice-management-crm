@@ -7,6 +7,7 @@ import React from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
+  import { toast } from 'react-toastify';
 
 // Zod schema for validation
 const brandSchema = z.object({
@@ -37,6 +38,7 @@ function AddBrand() {
             console.log("Submitting:", finalData);
 
             const response = await addNewBrand(finalData);
+            toast.success("Viola!!")
             console.log(response);
         } catch (error) {
             console.log(error);
