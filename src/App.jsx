@@ -29,6 +29,7 @@ function App() {
               <Route path="/product/add-product" element={<AddProducts />} />
               <Route path="/brand" element={<Brand />} />
               <Route path="/brand/add-brand" element={<AddBrand />} />
+              <Route path="/category" element={<Category />} />
               <Route path="/category/add-category" element={<AddCategory />} />
             </Routes>
           </div>

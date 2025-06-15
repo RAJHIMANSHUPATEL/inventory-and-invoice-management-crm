@@ -1,19 +1,23 @@
 import { getAllCategories } from "@/api/categories-api";
+import { columns } from "@/app-components/category/CategoryColumns";
+import { DataTable } from "@/app-components/Table/DataTable";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 
 const Category = () => {
+    const [data, setData] = useState([]);
 
     const navigate = useNavigate()
 
     const fetchCategories = async () => {
         try {
             const response = await getAllCategories();
-            console.log(response);
+            console.log(response.data)
+            setData(response.data);
         } catch (error) {
-            console.log(error.message);
+            throw new Error(error.message)
         }
     };
     useEffect(() => {
@@ -39,7 +43,7 @@ const Category = () => {
                     Add
                 </Button>
             </div>
-            {/* <DataTable columns={columns} data={data} /> */}
+            <DataTable columns={columns} data={data} />
         </div>
     );
 }
