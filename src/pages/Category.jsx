@@ -1,10 +1,13 @@
 import { getAllCategories } from "@/api/categories-api";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
+import { columns } from "../app-components/category/CategoriesColumns";
+import { DataTable } from "@/app-components/Table/DataTable";
 
 const Category = () => {
+    const [data, setData] = useState([]);
 
     const navigate = useNavigate()
 
@@ -12,6 +15,7 @@ const Category = () => {
         try {
             const response = await getAllCategories();
             console.log(response);
+            setData(response?.data);
         } catch (error) {
             console.log(error.message);
         }
@@ -39,7 +43,7 @@ const Category = () => {
                     Add
                 </Button>
             </div>
-            {/* <DataTable columns={columns} data={data} /> */}
+            <DataTable columns={columns} data={data} />
         </div>
     );
 }

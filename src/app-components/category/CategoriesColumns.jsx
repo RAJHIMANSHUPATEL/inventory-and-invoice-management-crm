@@ -7,8 +7,16 @@ export const columns = [
         header: "Name",
     },
     {
+        accessorKeyL: "description",
+        header: "Description",
+    },
+    {
         accessorKey: "imageUrl",
         header: "Logo",
+        cell: ({ row }) => {
+            const imageUrl = row.getValue("imageUrl");
+            return imageUrl?.slice(0, 4) ?? "";
+        }
     },
     {
         accessorKey: "isActive",
@@ -25,7 +33,7 @@ export const columns = [
                     <Button
                         variant="outline"
                         size="sm"
-                    // onClick={() => handleEdit(product)}
+                    onClick={() => handleEdit(product)}
                     >
                         Edit
                         <Pencil />

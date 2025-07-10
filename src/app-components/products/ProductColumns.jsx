@@ -35,14 +35,6 @@ export const columns = [
                     Edit
                     <Pencil />
                 </Button>
-                <Button
-                    variant="destructive"
-                    size="sm"
-                    // onClick={() => handleEdit(product)}
-                >
-                    Delete
-                    <Trash />
-                </Button>
                     </div>
             );
         },

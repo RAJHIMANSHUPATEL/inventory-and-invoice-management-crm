@@ -1,7 +1,10 @@
 import { addNewCategory } from "@/api/categories-api";
 import React from "react";
+import { useNavigate } from "react-router";
+import { toast } from "react-toastify";
 
 function AddCategory() {
+    const navigate = useNavigate();
     const handleSubmit = async () => {
         try {
             const data = {
@@ -11,6 +14,8 @@ function AddCategory() {
                 isActive: true,
             };
             const response = await addNewCategory(data);
+            toast.success("Items Added");
+            navigate("/categories");
             console.log(response);
         } catch (error) {
             console.log(error);
@@ -18,7 +23,7 @@ function AddCategory() {
     };
     return (
         <div>
-            <button className="bg-red-500" onClick={() => handleSubmit()}>AddBrand</button>
+            <button className="bg-red-500" onClick={() => handleSubmit()}>AddCategory</button>
         </div>
     );
 }
