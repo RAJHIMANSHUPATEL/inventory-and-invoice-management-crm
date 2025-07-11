@@ -17,7 +17,7 @@ const Category = () => {
             console.log(response);
             setData(response?.data);
         } catch (error) {
-            console.log(error.message);
+            throw new Error(error.message)
         }
     };
     useEffect(() => {
@@ -43,6 +43,7 @@ const Category = () => {
                     Add
                 </Button>
             </div>
+            <DataTable columns={columns} data={data} />
             <DataTable columns={columns} data={data} />
         </div>
     );

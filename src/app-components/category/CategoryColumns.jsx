@@ -27,7 +27,7 @@ export const columns = [
         header: "Active",
     },
     {
-        id: "edit",
+        id: "edit", // Use `id` instead of `accessorKey` for action columns
         header: "Edit",
         cell: ({ row }) => {
             const item = row.original;
