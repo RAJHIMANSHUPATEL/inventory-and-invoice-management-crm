@@ -17,6 +17,8 @@ const brandSchema = z.object({
 });
 
 function AddBrand() {
+    const navigate = useNavigate();
+
     // useForm with correct defaultValues and resolver
     const form = useForm({
         resolver: zodResolver(brandSchema),
@@ -40,6 +42,7 @@ function AddBrand() {
             const response = await addNewBrand(finalData);
             toast.success("Viola!!")
             console.log(response);
+            navigate("/brand")
         } catch (error) {
             console.log(error);
         }

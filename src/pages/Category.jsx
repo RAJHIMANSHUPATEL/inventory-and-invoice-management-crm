@@ -44,7 +44,7 @@ const Category = () => {
                 </Button>
             </div>
             <DataTable columns={columns} data={data} />
-            <DataTable columns={columns} data={data} />
+            {/* <DataTable columns={columns} data={data} /> */}
         </div>
     );
 }

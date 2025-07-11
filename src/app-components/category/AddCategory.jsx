@@ -50,7 +50,7 @@ function AddCategory() {
         try {
             await addNewCategory(values);
             toast.success("Category added successfully!");
-            navigate("/categories"); // Update with actual route
+            navigate("/category"); // Update with actual route
         } catch (error) {
             console.error(error);
             toast.error("Failed to add category.");
