@@ -1,7 +1,34 @@
+import { getAllBrands } from "@/api/brands-api";
+import { getAllCategories } from "@/api/categories-api";
 import { addNewProduct } from "@/api/products-api";
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 function AddProducts() {
+    const [categories, setCategories] = useState([]);
+    const [brands, setBrands] = useState([]);
+    // Fetching categories
+    const fetchCategories = async () => {
+        try {
+            const response = await getAllCategories();
+            setCategories(response.data)
+            console.log(response.data)
+        } catch (error) {
+            console.log(error.message)
+        }
+    }
+    const fetchBrands = async () => {
+        try {
+            const response = await getAllBrands();
+            setBrands(response.data)
+            console.log(response.data)
+        } catch (error) {
+            console.log(error.message)
+        }
+    }
+    useEffect(() => {
+        fetchCategories()
+        fetchBrands()
+    }, [])
     const handleClick = async () => {
         try {
             const data = {
