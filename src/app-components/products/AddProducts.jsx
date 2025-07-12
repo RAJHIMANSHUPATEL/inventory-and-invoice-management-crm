@@ -1,157 +1,191 @@
 import { getAllBrands } from "@/api/brands-api";
 import { getAllCategories } from "@/api/categories-api";
 import { addNewProduct } from "@/api/products-api";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import {
+  Form, FormField, FormLabel, FormControl, FormMessage,
+} from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Select, SelectContent, SelectItem, SelectTrigger } from "@/components/ui/select";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { Button } from "@/components/ui/button";
+import {
+  Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
+} from "@/components/ui/select";
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { useNavigate } from "react-router";
 import { z } from "zod";
-// Zod Schema
-const productSchema = z.object({
-    name: z.string().min(1, "Product name is required"),
+import { zodResolver } from "@hookform/resolvers/zod";
+import { v4 as uuidv4 } from "uuid";
+import { toast, ToastContainer } from "react-toastify";
+import { useNavigate } from "react-router";
+import 'react-toastify/dist/ReactToastify.css';
 
-    imageUrl: z.string().url("Image url must be a valid url"),
-    isActive: z.enum(["true", "false"]),
+const productSchema = z.object({
+  name: z.string().min(1, "Product name is required"),
+  description: z.string().min(1, "Description is required"),
+  price: z.coerce.number().min(1, "Price must be at least 1"),
+  quantity: z.coerce.number().min(1, "Quantity must be at least 1"),
+  brand: z.string().min(1, "Brand is required"),
+  category: z.string().min(1, "Category is required"),
+  imageUrl: z.string().url("Must be a valid URL"),
+  isActive: z.enum(["true", "false"]),
 });
 
-
 function AddProducts() {
-    const [categories, setCategories] = useState([]);
-    const [brands, setBrands] = useState([]);
-    const navigate = useNavigate();
-    const form = useForm({
-        resolver: zodResolver(productSchema),
-        defaultValues: {
-            name: "",
-            sku: "",
-            description: "",
-            brand: "",
-            category: "",
-            price: 0,
-            quantity: 50,
-            lowStockAlert: false,
-            supplier: "",
-            purchaseDate: ""
-        },
-    });
-    // Fetching categories
-    const fetchCategories = async () => {
-        try {
-            const response = await getAllCategories();
-            setCategories(response.data)
-            console.log(response.data)
-        } catch (error) {
-            console.log(error.message)
-        }
+  const [brands, setBrands] = useState([]);
+  const [categories, setCategories] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
+
+  const form = useForm({
+    resolver: zodResolver(productSchema),
+    defaultValues: {
+      name: "",
+      description: "",
+      price: 0,
+      quantity: 0,
+      brand: "",
+      category: "",
+      imageUrl: "",
+      isActive: "true",
+    },
+  });
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const [brandRes, categoryRes] = await Promise.all([
+          getAllBrands(),
+          getAllCategories(),
+        ]);
+        setBrands(brandRes.data);
+        setCategories(categoryRes.data);
+      } catch (error) {
+        toast.error("Failed to load brands or categories");
+        console.error(error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  const onSubmit = async (values) => {
+    setLoading(true);
+    try {
+      const generatedSku = `SKU-${values.brand.slice(0, 4).toUpperCase()}-${values.category.slice(0, 4).toUpperCase()}-${uuidv4().slice(0, 5).toUpperCase()}`;
+
+      const payload = {
+        ...values,
+        sku: generatedSku,
+        lowStockAlert: false,
+        supplier: "Tech Supplies Co.",
+        purchaseDate: new Date().toISOString().slice(0, 10),
+      };
+
+      await addNewProduct(payload);
+      toast.success("Product added successfully!");
+      setTimeout(() => navigate("/product"), 1500);
+    } catch (error) {
+      toast.error("Error adding product");
+      console.error(error.message);
+    } finally {
+      setLoading(false);
     }
+  };
 
-    // Fetching brands
-    const fetchBrands = async () => {
-        try {
-            const response = await getAllBrands();
-            setBrands(response.data)
-            console.log(response.data)
-        } catch (error) {
-            console.log(error.message)
-        }
-    }
-    useEffect(() => {
-        fetchCategories()
-        fetchBrands()
-    }, [])
+  return (
+    <div className=" p-4">
+      <h2 className="text-xl font-semibold mb-4">Add New Product</h2>
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+          {/* Form fields stay the same */}
+          {["name", "description", "imageUrl", "price", "quantity"].map((field) => (
+            <FormField
+              key={field}
+              control={form.control}
+              name={field}
+              render={({ field }) => (
+                <>
+                  <FormLabel className="capitalize">{field.name}</FormLabel>
+                  <FormControl>
+                    <Input
+                      type={["price", "quantity"].includes(field.name) ? "number" : "text"}
+                      placeholder={field.name}
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </>
+              )}
+            />
+          ))}
 
+          <FormField
+            control={form.control}
+            name="brand"
+            render={({ field }) => (
+              <>
+                <FormLabel>Brand</FormLabel>
+                <Select onValueChange={field.onChange} value={field.value}>
+                  <SelectTrigger><SelectValue placeholder="Select brand" /></SelectTrigger>
+                  <SelectContent>
+                    {brands.map((brand) => (
+                      <SelectItem key={brand._id} value={brand.name}>
+                        {brand.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <FormMessage />
+              </>
+            )}
+          />
 
+          <FormField
+            control={form.control}
+            name="category"
+            render={({ field }) => (
+              <>
+                <FormLabel>Category</FormLabel>
+                <Select onValueChange={field.onChange} value={field.value}>
+                  <SelectTrigger><SelectValue placeholder="Select category" /></SelectTrigger>
+                  <SelectContent>
+                    {categories.map((cat) => (
+                      <SelectItem key={cat._id} value={cat._id}>
+                        {cat.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <FormMessage />
+              </>
+            )}
+          />
 
-    const onSubmit = async () => {
-        try {
-            const data = {
-                "name": "Controller",
-                "sku": "WC-12345",
-                "description": "Ergonomic wireless controller with USB receiver",
-                "brand": "684552f4aea32e2870948b41",
-                "category": "6845a42f7d098da0ba4d1d74",
-                "price": 1499,
-                "quantity": 50,
-                "lowStockAlert": false,
-                "supplier": "Tech Supplies Co.",
-                "purchaseDate": "2025-06-09"
-            }
-            const response = await addNewProduct(data)
-            console.log(response)
-        } catch (error) {
-            console.log(error.message)
-        }
-    }
-    return <div>
-        <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-                {/* Product Name */}
-                <FormField
-                    control={form.control}
-                    name="name"
-                    render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>Product Name</FormLabel>
-                            <FormControl>
-                                <Input placeholder="Enter product name" {...field} />
-                            </FormControl>
-                            <FormMessage />
-                        </FormItem>
-                    )}
-                />
+          <FormField
+            control={form.control}
+            name="isActive"
+            render={({ field }) => (
+              <>
+                <FormLabel>Status</FormLabel>
+                <Select onValueChange={field.onChange} value={field.value}>
+                  <SelectTrigger><SelectValue /></SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="true">Active</SelectItem>
+                    <SelectItem value="false">Inactive</SelectItem>
+                  </SelectContent>
+                </Select>
+                <FormMessage />
+              </>
+            )}
+          />
 
-                {/* Description */}
-                <FormField
-                    control={form.control}
-                    name="description"
-                    render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>Description</FormLabel>
-                            <FormControl>
-                                <Input placeholder="Enter product description" {...field} />
-                            </FormControl>
-                            <FormMessage />
-                        </FormItem>
-                    )}
-                />
-
-                {/* Select Brand */}
-                <FormField
-                    control={form.control}
-                    name="brand"
-                    render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>Brand</FormLabel>
-                            <Select onValueChange={field.onChange} value={field.value}>
-                                <FormControl>
-                                    <SelectTrigger className="w-full">
-                                        {/* Show selected brand name or a placeholder */}
-                                        {field.value
-                                            ? brands.find((brand) => brand._id === field.value)?.name
-                                            : "Select a brand"}
-                                    </SelectTrigger>
-                                </FormControl>
-                                <SelectContent>
-                                    {brands?.map((brand) => (
-                                        <SelectItem key={brand._id} value={brand._id}>
-                                            {brand.name}
-                                        </SelectItem>
-                                    ))}
-                                </SelectContent>
-                            </Select>
-                            <FormMessage />
-                        </FormItem>
-                    )}
-                />
-
-
-            </form>
-        </Form>
-
-    </div>;
+          <Button type="submit" className="w-full" disabled={loading}>
+            {loading ? "Adding..." : "Add Product"}
+          </Button>
+        </form>
+      </Form>
+      <ToastContainer position="top-right" autoClose={2000} />
+    </div>
+  );
 }
 
 export default AddProducts;
