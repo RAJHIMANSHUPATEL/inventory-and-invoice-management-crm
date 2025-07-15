@@ -8,6 +8,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { toast } from 'react-toastify';
+import { useNavigate } from "react-router";
 
 // Zod schema for validation
 const brandSchema = z.object({

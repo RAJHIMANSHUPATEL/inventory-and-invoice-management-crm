@@ -63,14 +63,16 @@ function AddProducts() {
         console.error(error);
       }
     };
-
     fetchData();
   }, []);
 
   const onSubmit = async (values) => {
     setLoading(true);
     try {
-      const generatedSku = `SKU-${values.brand.slice(0, 4).toUpperCase()}-${values.category.slice(0, 4).toUpperCase()}-${uuidv4().slice(0, 5).toUpperCase()}`;
+      const brandCode = values.brand.slice(0, 4).toUpperCase();
+      const categoryName = categories.find(cat => cat._id === values.category)?.name || "CAT";
+      const categoryCode = categoryName.slice(0, 4).toUpperCase();
+      const generatedSku = `SKU-${brandCode}-${categoryCode}-${uuidv4().slice(0, 5).toUpperCase()}`;
 
       const payload = {
         ...values,
@@ -80,7 +82,7 @@ function AddProducts() {
         purchaseDate: new Date().toISOString().slice(0, 10),
       };
 
-      await addNewProduct(payload);
+            await addNewProduct(payload);
       toast.success("Product added successfully!");
       setTimeout(() => navigate("/product"), 1500);
     } catch (error) {
@@ -92,28 +94,27 @@ function AddProducts() {
   };
 
   return (
-    <div className=" p-4">
-      <h2 className="text-xl font-semibold mb-4">Add New Product</h2>
+    <div className=" mx-auto p-4 rounded-xl shadow-md">
+      <h2 className="text-2xl font-semibold mb-6">Add New Product</h2>
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-          {/* Form fields stay the same */}
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
           {["name", "description", "imageUrl", "price", "quantity"].map((field) => (
             <FormField
               key={field}
               control={form.control}
               name={field}
               render={({ field }) => (
-                <>
+                <div>
                   <FormLabel className="capitalize">{field.name}</FormLabel>
                   <FormControl>
                     <Input
                       type={["price", "quantity"].includes(field.name) ? "number" : "text"}
-                      placeholder={field.name}
+                      placeholder={`Enter ${field.name}`}
                       {...field}
                     />
                   </FormControl>
                   <FormMessage />
-                </>
+                </div>
               )}
             />
           ))}
@@ -122,20 +123,22 @@ function AddProducts() {
             control={form.control}
             name="brand"
             render={({ field }) => (
-              <>
+              <div>
                 <FormLabel>Brand</FormLabel>
                 <Select onValueChange={field.onChange} value={field.value}>
-                  <SelectTrigger><SelectValue placeholder="Select brand" /></SelectTrigger>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select brand" />
+                  </SelectTrigger>
                   <SelectContent>
                     {brands.map((brand) => (
-                      <SelectItem key={brand._id} value={brand.name}>
+                      <SelectItem key={brand._id} value={brand._id}>
                         {brand.name}
                       </SelectItem>
                     ))}
                   </SelectContent>
                 </Select>
                 <FormMessage />
-              </>
+              </div>
             )}
           />
 
@@ -143,10 +146,12 @@ function AddProducts() {
             control={form.control}
             name="category"
             render={({ field }) => (
-              <>
+              <div>
                 <FormLabel>Category</FormLabel>
                 <Select onValueChange={field.onChange} value={field.value}>
-                  <SelectTrigger><SelectValue placeholder="Select category" /></SelectTrigger>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select category" />
+                  </SelectTrigger>
                   <SelectContent>
                     {categories.map((cat) => (
                       <SelectItem key={cat._id} value={cat._id}>
@@ -156,7 +161,7 @@ function AddProducts() {
                   </SelectContent>
                 </Select>
                 <FormMessage />
-              </>
+              </div>
             )}
           />
 
@@ -164,17 +169,19 @@ function AddProducts() {
             control={form.control}
             name="isActive"
             render={({ field }) => (
-              <>
+              <div>
                 <FormLabel>Status</FormLabel>
                 <Select onValueChange={field.onChange} value={field.value}>
-                  <SelectTrigger><SelectValue /></SelectTrigger>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select status" />
+                  </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="true">Active</SelectItem>
                     <SelectItem value="false">Inactive</SelectItem>
                   </SelectContent>
                 </Select>
                 <FormMessage />
-              </>
+              </div>
             )}
           />
 
